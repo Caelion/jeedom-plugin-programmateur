@@ -26,8 +26,17 @@ class programmateur extends eqLogic {
 	/* ***********************Methode static*************************** */
 
 	public static function nextprog_on($_params) {
-log::add('programmateur', 'debug','Lancement de nextprog_on');
+		log::add('programmateur','debug','Exécution de la fonction Nextprog_on');
 		$eqLogic = eqLogic::byId($_params['eq_id']);
+		$crons = cron::searchClassAndFunction('programmateur','nextprog_off','"eq_id":' . $eqlogic);
+		if (is_array($crons) && count($crons) > 0) {
+			foreach ($crons as $cron) {
+				if ($cron->getState() != 'run') {
+					log::add('programmateur','debug','- Suppression du cron Nextprog_off : '.$cron->getSchedule());
+					$cron->remove();
+				}
+			}
+		}
 		if (is_object($eqLogic)) {
 			$cmd_state = $eqLogic->getCmd(null, 'etat');
 			if (!is_object($cmd_state) || $cmd_state->execCmd() != 1) {// On s'assure que la planification est toujours sur on sinon on quitte
@@ -35,13 +44,11 @@ log::add('programmateur', 'debug','Lancement de nextprog_on');
 			}
 			if (isset($_params['on']) && $_params['on'] != '') {
 				cmd::byId(str_replace('#', '',$_params['on']))->execCmd();
-log::add('programmateur', 'debug','Nextprog - ' . $_params['eq_id'] . ' - On - '.$_params['on']);
+				log::add('programmateur','info','Nextprog - ' . $_params['eq_id'] . ' - On - '.cmd::byId(str_replace('#','',$_params['on']))->getHumanName());
 			}
-log::add('programmateur', 'debug','Nextprog - ' . $_params['eq_id'] . ' - Delay - '.$_params['delay'].' secondes');
 			if (isset($_params['delay']) && $_params['delay'] > 0 && isset($_params['off']) && $_params['off'] != '') {
 				$heure_timestamp = time()+$_params['delay'];
-//log::add('programmateur', 'debug','Nextprog - Timestamp - ' . $heure_timestamp);
-				programmateur::cleannextprog($_params['eq_id'],'nextprog_off');
+				log::add('programmateur','info','Nextprog - ' . $_params['eq_id'] . ' - Délai - '.($_params['delay']/60).' minutes ('.cron::convertDateToCron($heure_timestamp).')');
 				$cron = new cron();
 				$cron->setClass('programmateur');
 				$cron->setFunction('nextprog_off');
@@ -54,7 +61,7 @@ log::add('programmateur', 'debug','Nextprog - ' . $_params['eq_id'] . ' - Delay 
 	}
 
 	public static function nextprog_off($_params) {
-log::add('programmateur', 'debug','Lancement de nextprog_off');
+		log::add('programmateur','debug','Exécution de la fonction Nextprog_off');
 		$eqLogic = eqLogic::byId($_params['eq_id']);
 		if (is_object($eqLogic)) {
 			$cmd_state = $eqLogic->getCmd(null, 'etat');
@@ -63,107 +70,73 @@ log::add('programmateur', 'debug','Lancement de nextprog_off');
 			}
 			if (isset($_params['off'])) {
 				cmd::byId(str_replace('#', '',$_params['off']))->execCmd();
-log::add('programmateur', 'debug','Nextprog - ' . $_params['eq_id'] . ' - Off - '.$_params['off']);
+				log::add('programmateur','info','Nextprog - ' . $_params['eq_id'] . ' - Off - '.cmd::byId(str_replace('#','',$_params['off']))->getHumanName());
 			}
 		}
 	}
 
-	public function cleannextprog($equipement,$fonction,$array,$type) {
-//log::add('programmateur', 'debug', 'Exécution de la fonction cleannextprog ' . $type );
-		$count=0;
-		$crons = cron::searchClassAndFunction('programmateur', $fonction, '"eq_id":' . $equipement);
-		if (is_array($crons) && count($crons) > 0) {
-			foreach ($crons as $cron) {
-				$arrayprogramme = array_values($cron->getOption())[0].array_values($cron->getOption())[1].array_values($cron->getOption())[2].array_values($cron->getOption())[3].array_values($cron->getOption())[4];
-				$arrayaprogrammer = $array['eq_id'].$array['delay'].$array['on'].$array['off'].$array['timestamp'];
-//log::add('programmateur', 'debug', 'Programmé ' . $arrayprogramme);
-//log::add('programmateur', 'debug', 'Aprogrammer ' . $arrayaprogrammer);
-				if ($arrayprogramme == $arrayaprogrammer) {
-log::add('programmateur', 'debug', 'Exécution de la fonction cleannextprog '.$fonction.' - '.$equipement.' - '.$type.' - Pas de changement du cron');
-					$count=$count+1;
-			} else {
-log::add('programmateur', 'debug', 'Exécution de la fonction cleannextprog '.$fonction.' - '.$equipement.' - '.$type.' - Suppression du cron');
-					if ($cron->getState() != 'run') {
-						$cron->remove();
+	public function nextprog($equipement) {
+		log::add('programmateur','debug','- Appel de la fonction Nextprog :');
+		$programmateur = eqLogic::byId($equipement);
+		if ($programmateur->getIsEnable() == 1) { // Vérification que l'équipement est actif
+			$cmd = $programmateur->getCmd(null, 'etat');// Retourne la commande "etat" si elle existe
+			if (is_object($cmd)) {//Si la commande existe
+				$cmdValue = $cmd->execCmd();
+				if ($cmdValue == 1) {// Programmateur sur On
+					$today=date('N');
+					$lundi=$programmateur->getCmd(null, 'lundi')->execCmd();
+					$mardi=$programmateur->getCmd(null, 'mardi')->execCmd();
+					$mercredi=$programmateur->getCmd(null, 'mercredi')->execCmd();
+					$jeudi=$programmateur->getCmd(null, 'jeudi')->execCmd();
+					$vendredi=$programmateur->getCmd(null, 'vendredi')->execCmd();
+					$samedi=$programmateur->getCmd(null, 'samedi')->execCmd();
+					$dimanche=$programmateur->getCmd(null, 'dimanche')->execCmd();
+					$duree=$programmateur->getCmd(null, 'duree')->execCmd();
+
+					$JF = 0;
+					$JF_box=$programmateur->getConfiguration('JF');
+					if ($programmateur->getConfiguration('CommandeJF') != '') {
+						$JF=cmd::byId(str_replace('#', '',$programmateur->getConfiguration('CommandeJF')))->execCmd();
+					}
+					log::add('programmateur','debug','  - JF : Actif : ' . $JF_box . ' - Critère respecté : ' . $JF);
+					$Mode = 0;
+					$Mode_box=$programmateur->getConfiguration('Mode');
+					if ($programmateur->getConfiguration('CommandeMode') != '') {
+						$Mode=cmd::byId(str_replace('#', '',$programmateur->getConfiguration('CommandeMode')))->execCmd();
+						if ($Mode == $programmateur->getConfiguration('ExclMode')) {
+							$Mode = 1;
+						}
+					}
+					log::add('programmateur','debug','  - Mode : Actif : ' . $Mode_box . ' - Critère respecté : ' . $Mode);
+
+					$heure = $programmateur->getCmd(null, 'horaire')->execCmd();
+					$heure = substr('000'.$heure,-4);//Traitement des 0 sur les heures < 10:00
+					$heure_timestamp = strtotime(date('d-m-Y') . ' ' . $heure);
+
+					$array = array('eq_id' => intval($programmateur->getId()), 'delay' => $duree*60, 'on' => $programmateur->getConfiguration('CommandeOn'), 'off' => $programmateur->getConfiguration('CommandeOff'), 'timestamp' => $heure_timestamp);
+					// Si on doit programmer un cron
+					if (($heure_timestamp > strtotime(date('H:i'))) && (($JF_box == 1 && $JF == 0) || $JF_box == 0) && (($Mode_box == 1 && $Mode == 0) || $Mode_box == 0) && (($today == 1 && $lundi == 1)||($today == 2 && $mardi == 1)||($today == 3 && $mercredi == 1)||($today == 4 && $jeudi == 1)||($today == 5 && $vendredi == 1)||($today == 6 && $samedi == 1)||($today == 7 && $dimanche == 1))) {
+						log::add('programmateur','debug','  - Nouveau cron à '.date('H:i',$array['timestamp']));
+						$cron = new cron();
+						$cron->setClass('programmateur');
+						$cron->setFunction('nextprog_on');
+						$cron->setOption($array);
+						$cron->setOnce(1);
+						$cron->setSchedule(cron::convertDateToCron($array['timestamp']));
+						$cron->save();
+					} else {
+						log::add('programmateur','debug','  - Pas de programmation à mettre en place');
 					}
 				}
 			}
 		}
-		if ($type == 'cron' && $count == 0) {
-log::add('programmateur', 'debug', 'Exécution de la fonction cleannextprog '.$fonction.' - '.$equipement.' - Nouveau cron');
-			$cron = new cron();
-			$cron->setClass('programmateur');
-			$cron->setFunction('nextprog_on');
-			$cron->setOption($array);
-			$cron->setOnce(1);
-			$cron->setSchedule(cron::convertDateToCron($array['timestamp']));
-			$cron->save();
-		}
 	}
 
-	/* Fonction exécutée automatiquement toutes les minutes par Jeedom */
+	/* Fonction exécutée automatiquement toutes les minutes par Jeedom
 	public static function cron() {
-//log::add('programmateur', 'debug', 'Exécution de la fonction cron');
-		foreach (self::byType('programmateur') as $programmateur) {// Parcours tous les équipements du plugin
-			if ($programmateur->getIsEnable() == 1) { // Vérification que l'équipement est actif
-				$cmd = $programmateur->getCmd(null, 'etat');// Retourne la commande "etat" si elle existe
-				if (is_object($cmd)) {//Si la commande existe
-					$cmdValue = $cmd->execCmd();
-					if ($cmdValue == 1) {// Si le programmateur est sur On
-						$today=date('N');
-						$lundi=$programmateur->getCmd(null, 'lundi')->execCmd();
-						$mardi=$programmateur->getCmd(null, 'mardi')->execCmd();
-						$mercredi=$programmateur->getCmd(null, 'mercredi')->execCmd();
-						$jeudi=$programmateur->getCmd(null, 'jeudi')->execCmd();
-						$vendredi=$programmateur->getCmd(null, 'vendredi')->execCmd();
-						$samedi=$programmateur->getCmd(null, 'samedi')->execCmd();
-						$dimanche=$programmateur->getCmd(null, 'dimanche')->execCmd();
-						$duree=$programmateur->getCmd(null, 'duree')->execCmd();
 
-						$JF_box=$programmateur->getConfiguration('JF');
-						if ($programmateur->getConfiguration('CommandeJF') != '') {
-							$JF=cmd::byId(str_replace('#', '',$programmateur->getConfiguration('CommandeJF')))->execCmd();
-						} else {$JF = 0;}
-//log::add('programmateur', 'debug', 'JF : ' . $JF_box.$JF);
-						$Mode_box=$programmateur->getConfiguration('Mode');
-						if ($programmateur->getConfiguration('CommandeMode') != '') {
-							$Mode=cmd::byId(str_replace('#', '',$programmateur->getConfiguration('CommandeMode')))->execCmd();
-							if ($Mode==$programmateur->getConfiguration('ExclMode')){
-								$Mode = 1;
-							} else {
-								$Mode = 0;
-							}
-						} else {$Mode = 0;}
-//log::add('programmateur', 'debug', 'Mode : ' . $Mode_box.$Mode);
-
-						$heure = $programmateur->getCmd(null, 'horaire')->execCmd();
-						//Traitement des 0
-						if ($heure <1000 && $heure >=100) {
-							$heure = '0'.$heure;
-						} else if ($heure <100 && $heure >0) {
-							$heure = '00'.$heure;
-						} else if ($heure == 0) {
-							$heure = '000'.$heure;
-						}
-						$heure_timestamp = strtotime(date('d-m-Y') . ' ' . $heure);//Correction du GMT+1
-//log::add('programmateur', 'debug', 'timestamp programmateur : ' . $heure_timestamp);//Timestamp de la programmateur du jour
-//log::add('programmateur', 'debug', 'timestamp actuel : ' . strtotime(date('H:i')));
-						$array = array('eq_id' => intval($programmateur->getId()), 'delay' => $duree*60, 'on' => $programmateur->getConfiguration('CommandeOn'), 'off' => $programmateur->getConfiguration('CommandeOff'), 'timestamp' => $heure_timestamp);
-						programmateur::cleannextprog($programmateur->getId(),'nextprog_on',$array,'clean');
-
-						if ((($JF_box == 1 && $JF == 0) || $JF_box == 0) && (($Mode_box == 1 && $Mode == 0) || $Mode_box == 0) && (($today == 1 && $lundi == 1)||($today == 2 && $mardi == 1)||($today == 3 && $mercredi == 1)||($today == 4 && $jeudi == 1)||($today == 5 && $vendredi == 1)||($today == 6 && $samedi == 1)||($today == 7 && $dimanche == 1))) {
-							if (strtotime(date('H:i')) > $heure_timestamp) {
-//log::add('programmateur', 'debug', 'cron depasse');
-							} else {
-								programmateur::cleannextprog($programmateur->getId(),'nextprog_on',$array,'cron');
-							}
-						}
-					}
-				}
-			}
-		}
 	}
-
+	*/
 
 	/* Fonction exécutée automatiquement toutes les heures par Jeedom
 	public static function cronHourly() {
@@ -171,11 +144,13 @@ log::add('programmateur', 'debug', 'Exécution de la fonction cleannextprog '.$f
 	}
 	*/
 
-	/* Fonction exécutée automatiquement tous les jours par Jeedom
+	/* Fonction exécutée automatiquement tous les jours par Jeedom */
 	public static function cronDaily() {
-
+		log::add('programmateur','debug','Exécution de la fonction CronDaily');
+		foreach (self::byType('programmateur') as $programmateur) {// Parcours tous les équipements du plugin
+			programmateur::nextprog($programmateur->getId());
+		}
 	}
-	*/
 
 	/* *********************Méthodes d'instance************************* */
 
@@ -192,7 +167,7 @@ log::add('programmateur', 'debug', 'Exécution de la fonction cleannextprog '.$f
 	}
 
 	public function postSave() {
-log::add('programmateur', 'debug', 'Exécution de la fonction postSave');
+		log::add('programmateur','debug','Exécution de la fonction postSave');
 		//Création des commandes
 		$refresh = $this->getCmd(null, 'refresh');
 		if (!is_object($refresh)) {
@@ -660,10 +635,12 @@ log::add('programmateur', 'debug', 'Exécution de la fonction postSave');
 			$info->setOrder($order++);
 			$info->setIsVisible(0);
 			$info->setisHistorized(1);
+			$info->setConfiguration('maxValue', 1440);
 		}
 		$info->setEqLogic_id($this->getId());
 		$info->setType('info');
 		$info->setSubType('numeric');
+		$info->setUnite('min');
 		$info->save();
 
 		$action = $this->getCmd(null, 'var_duree');
@@ -672,6 +649,7 @@ log::add('programmateur', 'debug', 'Exécution de la fonction postSave');
 			$action->setLogicalId('var_duree');
 			$action->setName(__('Var_Durée', __FILE__));
 			$action->setOrder($order++);
+			$action->setConfiguration('maxValue', 1440);
 			$action->setTemplate('dashboard','button');
 			$action->setTemplate('mobile','button');
 			$action->setDisplay('showNameOndashboard','0');
@@ -740,19 +718,41 @@ class programmateurCmd extends cmd {
 	*/
 
 	public function execute($_options = array()) {
-log::add('programmateur', 'debug', 'Exécution de la fonction execute');
+		log::add('programmateur','debug','Exécution de la fonction Execute');
+		// Modification donc on supprime tous les précédents crons de l'équipement
+		$eqlogic = $this->getEqLogic()->getId();
+		$crons = cron::searchClassAndFunction('programmateur','nextprog_on','"eq_id":' . $eqlogic);
+		if (is_array($crons) && count($crons) > 0) {
+			foreach ($crons as $cron) {
+				if ($cron->getState() != 'run') {
+					log::add('programmateur','debug','- Suppression du cron Nextprog_on : '.$cron->getSchedule());
+					$cron->remove();
+				}
+			}
+		}
+		// Action sur refresh
 		if ($this->getLogicalId() == 'refresh') {
 			$this->getEqLogic()->refresh();
-			return;
+			//return;
 		}
+		// Action sur modification du slider
 		switch ($this->getSubType()) {
+			case 'other':
+				log::add('programmateur','debug','- Action sur Other');
+				$virtualCmd = virtualCmd::byId($this->getConfiguration('updateCmdId'));
+				$value = $this->getConfiguration('updateCmdToValue');
+				$result = jeedom::evaluateExpression($value);
+				$virtualCmd->event($result);
+			break;
 			case 'slider':
+				log::add('programmateur','debug','- Action sur Slider');
 				$virtualCmd = virtualCmd::byId($this->getConfiguration('infoName'));
 				$value = $_options['slider'];
 				$result = jeedom::evaluateExpression($value);
 				$virtualCmd->event($result);
 			break;
 		}
+		programmateur::nextprog($eqlogic);
 	}
 
 	/* **********************Getteur Setteur*************************** */

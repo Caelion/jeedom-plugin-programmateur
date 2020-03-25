@@ -24,59 +24,70 @@ function addCmdToTable(_cmd) {
 		_cmd.configuration = {};
 	}
 	if (init(_cmd.logicalId) == 'refresh') {
-		return;
-	}
-
-	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-
-	tr += '<td>';
-	tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
-	if (init(_cmd.type) == 'action') {
-		tr += 'Sur : <select class="cmdAttr form-control input-sm" data-l1key="value" style="display : none;margin-top : 5px;width:calc(100% - 50px);display:inline" title="{{La valeur de la commande vaut par défaut la commande}}">';
-		tr += '<option value="">Aucune</option>';
-		tr += '</select>';
-	}
-	tr += '</td>';
-
-	tr += '<td>';
-	tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
-	tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
-	tr += '</td>';
-
-	tr += '<td>';
-	if (init(_cmd.type) == 'action' && init(_cmd.subType) == 'other') {
-		tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="updateCmdId" style=margin-top:5px;" title="Commande d\'information à mettre à jour">';
-		tr += '<option value="">Aucune</option>';
-		tr += '</select>';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="updateCmdToValue" placeholder="Valeur de l\'information" style="margin-top:5px;">';
-	} else if (init(_cmd.type) == 'action' && init(_cmd.subType) == 'slider') {
-		tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="infoName" style="margin-top:5px;" title="Commande d\'information à mettre à jour">';
-		tr += '<option value="">Aucune</option>';
-		tr += '</select>';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" placeholder="Valeur de l\'information" style="margin-top:5px;">';
-	}
-	tr += '</td>';
-
-	tr += '<td>';
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary"/>{{Inverser}}</label></span> ';
-	tr += '<br>';
-	tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="width:30%;display:inline-block;">';
-	tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width:30%;display:inline-block;">';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="unite" placeholder="Unité" title="{{Unité}}" style="width:30%;display:inline-block;margin-right:5px;">';
-	tr += '</td>';
-
-	tr += '<td>';
-	if (is_numeric(_cmd.id)) {
-		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fa fa-cogs"></i></a> ';
+		var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+		tr += '<td>';
+			tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
+			tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
+		tr += '</td>';
+		tr += '<td></td>';
+		tr += '<td></td>';
+		tr += '<td></td>';
+		tr += '<td>';
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
-	}
-	tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
-	tr += '</td>';
+		tr += '</td>';
+		tr += '</tr>';
+	} else {
+		var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 
-	tr += '</tr>';
+		tr += '<td>';
+		tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
+		if (init(_cmd.type) == 'action') {
+			tr += 'Sur : <select class="cmdAttr form-control input-sm" data-l1key="value" style="display : none;margin-top : 5px;width:calc(100% - 50px);display:inline" title="{{La valeur de la commande vaut par défaut la commande}}">';
+			tr += '<option value="">Aucune</option>';
+			tr += '</select>';
+		}
+		tr += '</td>';
+
+		tr += '<td>';
+		tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
+		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
+		tr += '</td>';
+
+		tr += '<td>';
+		if (init(_cmd.type) == 'action' && init(_cmd.subType) == 'other') {
+			tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="updateCmdId" style=margin-top:5px;" title="Commande d\'information à mettre à jour">';
+			tr += '<option value="">Aucune</option>';
+			tr += '</select>';
+			tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="updateCmdToValue" placeholder="Valeur de l\'information" style="margin-top:5px;">';
+		} else if (init(_cmd.type) == 'action' && init(_cmd.subType) == 'slider') {
+			tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="infoName" style="margin-top:5px;" title="Commande d\'information à mettre à jour">';
+			tr += '<option value="">Aucune</option>';
+			tr += '</select>';
+			tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="value" placeholder="Valeur de l\'information" style="margin-top:5px;">';
+		}
+		tr += '</td>';
+
+		tr += '<td>';
+		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
+		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary"/>{{Inverser}}</label></span> ';
+		tr += '<br>';
+		tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="width:30%;display:inline-block;">';
+		tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width:30%;display:inline-block;">';
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="unite" placeholder="Unité" title="{{Unité}}" style="width:30%;display:inline-block;margin-right:5px;">';
+		tr += '</td>';
+
+		tr += '<td>';
+		if (is_numeric(_cmd.id)) {
+			tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fa fa-cogs"></i></a> ';
+			tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
+		}
+		tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
+		tr += '</td>';
+
+		tr += '</tr>';
+    }
 
 	$('#table_cmd tbody').append(tr);
 	var tr = $('#table_cmd tbody tr:last');
