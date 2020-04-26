@@ -28,7 +28,7 @@ class programmateur extends eqLogic {
 	public static function nextprog_on($_params) {
 		log::add('programmateur','debug','Exécution de la fonction Nextprog_on');
 		$eqLogic = eqLogic::byId($_params['eq_id']);
-		$crons = cron::searchClassAndFunction('programmateur','nextprog_off','"eq_id":' . $eqlogic);
+		$crons = cron::searchClassAndFunction('programmateur','nextprog_off','"eq_id":' . $_params['eq_id']);
 		if (is_array($crons) && count($crons) > 0) {
 			foreach ($crons as $cron) {
 				if ($cron->getState() != 'run') {
