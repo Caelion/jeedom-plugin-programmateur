@@ -128,41 +128,40 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label">{{Commande On}}</label>
-							<div class="col-sm-3">
-								<div class="input-group">
-									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="CommandeOn" placeholder="{{Commande exécutée à l'heure spécifiée}}"/>
-									<span class="input-group-btn">
-										<a class="btn btn-default" id="bt_selectCommandeOn">
-											<i class="fa fa-list-alt"></i>
-										</a>
-									</span>
-								</div>
+							<label class="col-sm-3 control-label">{{Action 1}}</label>
+							<div class="col-sm-2">
+								<select id="bt_selectTypeAction1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TypeAction1" >
+									<option value="">{{Aucun}}</option>
+									<option value="Commande">{{Commande}}</option>
+									<option value="Scenario">{{Scénario}}</option>
+								</select>
 							</div>
+							<div class="col-sm-5" id="Action1" ></div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label">{{Commande Off}}</label>
-							<div class="col-sm-3">
-								<div class="input-group">
-									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="CommandeOff" placeholder="{{Commande exécutée à la fin du temps spécifié}}"/>
-									<span class="input-group-btn">
-										<a class="btn btn-default" id="bt_selectCommandeOff">
-											<i class="fa fa-list-alt"></i>
-										</a>
-									</span>
-								</div>
+							<label class="col-sm-3 control-label">{{Action 2}}</label>
+							<div class="col-sm-2">
+								<select id="bt_selectTypeAction2" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TypeAction2" >
+									<option value="">{{Aucun}}</option>
+									<option value="Commande">{{Commande}}</option>
+									<option value="Scenario">{{Scénario}}</option>
+								</select>
 							</div>
+							<div class="col-sm-5" id="Action2" ></div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Exclusion des actions les jours fériés}}</label>
 							<div class="col-sm-1" style="width:20px">
 								<label class="checkbox-inline" style="vertical-align:top;"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="JF"/></label>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<div class="input-group">
-									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="CommandeJF" placeholder="{{Commande info binaire déterminant un jour férié}}"/>
+									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="CommandeJF" placeholder="{{Variable ou commande info binaire déterminant un jour férié}}"/>
 									<span class="input-group-btn">
-										<a class="btn btn-default" id="bt_selectCommandeJF">
+										<a class="btn btn-default" id="bt_selectVariableJF" title="{{Sélectionner une variable}}">
+											<i class="fa fa-list-alt"></i>
+										</a>
+										<a class="btn btn-default" id="bt_selectCommandeJF" title="{{Sélectionner une commande}}">
 											<i class="fa fa-list-alt"></i>
 										</a>
 									</span>
@@ -174,11 +173,11 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 							<div class="col-sm-1" style="width:20px">
 								<label class="checkbox-inline" style="vertical-align:top;"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Mode"/></label>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<div class="input-group">
 									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="CommandeMode" placeholder="{{Commande info string déterminant le mode actuel}}"/>
 									<span class="input-group-btn">
-										<a class="btn btn-default" id="bt_selectCommandeMode">
+										<a class="btn btn-default" id="bt_selectCommandeMode" title="{{Sélectionner une commande}}">
 											<i class="fa fa-list-alt"></i>
 										</a>
 									</span>
@@ -188,6 +187,12 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 								<div class="input-group">
 									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ExclMode" placeholder="{{Valeur du mode}}"/>
 								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">{{Désactiver la répétition}}</label>
+							<div class="col-sm-1" style="width:20px">
+								<label class="checkbox-inline" style="vertical-align:top;"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="NoRepeat"/></label>
 							</div>
 						</div>
 					</fieldset>

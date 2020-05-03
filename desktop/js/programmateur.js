@@ -87,7 +87,7 @@ function addCmdToTable(_cmd) {
 		tr += '</td>';
 
 		tr += '</tr>';
-    }
+	}
 
 	$('#table_cmd tbody').append(tr);
 	var tr = $('#table_cmd tbody tr:last');
@@ -108,18 +108,99 @@ function addCmdToTable(_cmd) {
 }
 
 // Fonction pour ajouter la sélection des commandes
-$("#bt_selectCommandeOn").on('click', function () {
-	jeedom.cmd.getSelectModal({cmd: {type: 'action', subType: 'other'}}, function (result) {
-		$('.eqLogicAttr[data-l1key=configuration][data-l2key=CommandeOn]').value(result.human);
-	});
+$("#bt_selectTypeAction1").on('change', function () {
+	var value = document.getElementById("bt_selectTypeAction1").value;
+	if (value == '') {
+		var txt = `
+			<div class="input-group" style="display:none">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action1" value=""/>
+			</div>`;
+	} else if (value == 'Commande') {
+		var txt = `
+			<div class="input-group">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action1" placeholder="{{Commande à exécuter}}"/>
+				<span class="input-group-btn">
+					<a class="btn btn-default" id="bt_selectAction1" title="{{Sélectionner une commande}}">
+						<i class="fa fa-list-alt"></i>
+					</a>
+				</span>
+			</div>`;
+	} else if (value == 'Scenario') {
+		var txt = `
+			<div class="input-group">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action1" placeholder="{{Scénario à exécuter}}"/>
+				<span class="input-group-btn">
+					<a class="btn btn-default" id="bt_selectAction1" title="{{Sélectionner un scénario}}">
+						<i class="fa fa-list-alt"></i>
+					</a>
+				</span>
+			</div>`;
+	}
+	$('#Action1').empty().append(txt);
+	if (value == 'Commande') {
+		$("#bt_selectAction1").on('click', function () {
+			jeedom.cmd.getSelectModal({cmd: {type: 'action', subType: 'other'}}, function (result) {
+				$('.eqLogicAttr[data-l1key=configuration][data-l2key=Action1]').value(result.human);
+			});
+		});
+	} else if (value == 'Scenario') {
+		$("#bt_selectAction1").on('click', function () {
+			jeedom.scenario.getSelectModal({},function (result) {
+				$('.eqLogicAttr[data-l1key=configuration][data-l2key=Action1]').value(result.human);
+			});
+		});
+	}
 });
-$("#bt_selectCommandeOff").on('click', function () {
-	jeedom.cmd.getSelectModal({cmd: {type: 'action', subType: 'other'}}, function (result) {
-		$('.eqLogicAttr[data-l1key=configuration][data-l2key=CommandeOff]').value(result.human);
-	});
+$("#bt_selectTypeAction2").on('change', function () {
+	var value = document.getElementById("bt_selectTypeAction2").value;
+	if (value == '') {
+		var txt = `
+			<div class="input-group" style="display:none">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action2" value=""/>
+			</div>`;
+	} else if (value == 'Commande') {
+		var txt = `
+			<div class="input-group">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action2" placeholder="{{Commande à exécuter}}"/>
+				<span class="input-group-btn">
+					<a class="btn btn-default" id="bt_selectAction2" title="{{Sélectionner une commande}}">
+						<i class="fa fa-list-alt"></i>
+					</a>
+				</span>
+			</div>`;
+	} else if (value == 'Scenario') {
+		var txt = `
+			<div class="input-group">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action2" placeholder="{{Scénario à exécuter}}"/>
+				<span class="input-group-btn">
+					<a class="btn btn-default" id="bt_selectAction2" title="{{Sélectionner un scénario}}">
+						<i class="fa fa-list-alt"></i>
+					</a>
+				</span>
+			</div>`;
+	}
+	$('#Action2').empty().append(txt);
+	if (value == 'Commande') {
+		$("#bt_selectAction2").on('click', function () {
+			jeedom.cmd.getSelectModal({cmd: {type: 'action', subType: 'other'}}, function (result) {
+				$('.eqLogicAttr[data-l1key=configuration][data-l2key=Action2]').value(result.human);
+			});
+		});
+	} else if (value == 'Scenario') {
+		$("#bt_selectAction2").on('click', function () {
+			jeedom.scenario.getSelectModal({},function (result) {
+				$('.eqLogicAttr[data-l1key=configuration][data-l2key=Action2]').value(result.human);
+			});
+		});
+	}
 });
 $("#bt_selectCommandeJF").on('click', function () {
 	jeedom.cmd.getSelectModal({cmd: {type: 'info', subType: 'binary'}}, function (result) {
+		$('.eqLogicAttr[data-l1key=configuration][data-l2key=CommandeJF]').value(result.human);
+	});
+});
+$("#bt_selectVariableJF").on('click', function () {
+	jeedom.dataStore.getSelectModal({}, function (result) {
 		$('.eqLogicAttr[data-l1key=configuration][data-l2key=CommandeJF]').value(result.human);
 	});
 });
