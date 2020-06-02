@@ -266,7 +266,6 @@ class programmateur extends eqLogic {
 			$info->setName(__('Lundi', __FILE__));
 			$info->setOrder($order++);
 			$info->setIsVisible(0);
-			$info->setValue(1);
 		}
 		$info->setEqLogic_id($this->getId());
 		$info->setType('info');
