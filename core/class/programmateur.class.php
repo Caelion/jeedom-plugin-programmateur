@@ -227,8 +227,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('on');
 			$action->setName(__('On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','toggle');
-			$action->setTemplate('mobile','toggle');
+			$action->setTemplate('dashboard','programmateur::toggle');
+			$action->setTemplate('mobile','programmateur::toggle');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -246,8 +246,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('off');
 			$action->setName(__('Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','toggle');
-			$action->setTemplate('mobile','toggle');
+			$action->setTemplate('dashboard','programmateur::toggle');
+			$action->setTemplate('mobile','programmateur::toggle');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -278,8 +278,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('lun_on');
 			$action->setName(__('Lun_On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -297,8 +297,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('lun_off');
 			$action->setName(__('Lun_Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -329,8 +329,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('mar_on');
 			$action->setName(__('Mar_On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -348,8 +348,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('mar_off');
 			$action->setName(__('Mar_Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -380,8 +380,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('mer_on');
 			$action->setName(__('Mer_On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -399,8 +399,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('mer_off');
 			$action->setName(__('Mer_Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -431,8 +431,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('jeu_on');
 			$action->setName(__('Jeu_On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -450,8 +450,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('jeu_off');
 			$action->setName(__('Jeu_Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -482,8 +482,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('ven_on');
 			$action->setName(__('Ven_On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -501,8 +501,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('ven_off');
 			$action->setName(__('Ven_Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -533,8 +533,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('sam_on');
 			$action->setName(__('Sam_On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -552,8 +552,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('sam_off');
 			$action->setName(__('Sam_Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -584,8 +584,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('dim_on');
 			$action->setName(__('Dim_On', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -603,8 +603,8 @@ class programmateur extends eqLogic {
 			$action->setLogicalId('dim_off');
 			$action->setName(__('Dim_Off', __FILE__));
 			$action->setOrder($order++);
-			$action->setTemplate('dashboard','day');
-			$action->setTemplate('mobile','day');
+			$action->setTemplate('dashboard','programmateur::day');
+			$action->setTemplate('mobile','programmateur::day');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -640,8 +640,8 @@ class programmateur extends eqLogic {
 			$action->setOrder($order++);
 			$action->setConfiguration('minValue', 0);
 			$action->setConfiguration('maxValue', 2359);
-			$action->setTemplate('dashboard','time');
-			$action->setTemplate('mobile','time');
+			$action->setTemplate('dashboard','programmateur::time');
+			$action->setTemplate('mobile','programmateur::time');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 		}
@@ -677,8 +677,8 @@ class programmateur extends eqLogic {
 			$action->setOrder($order++);
 			$action->setConfiguration('minValue', -1440);
 			$action->setConfiguration('maxValue', 1440);
-			$action->setTemplate('dashboard','delay');
-			$action->setTemplate('mobile','delay');
+			$action->setTemplate('dashboard','programmateur::delay');
+			$action->setTemplate('mobile','programmateur::delay');
 			$action->setDisplay('showNameOndashboard','0');
 			$action->setDisplay('showNameOnmobile','0');
 				$arr['step'] = 10;
