@@ -139,6 +139,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 								</select>
 							</div>
 							<div class="col-sm-5" id="Action1" ></div>
+							<div class="col-sm-2" id="TagAction1"></div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Action 2}}</label>
@@ -150,6 +151,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 								</select>
 							</div>
 							<div class="col-sm-5" id="Action2" ></div>
+							<div class="col-sm-2" id="TagAction2"></div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Exclusion des actions les jours fériés}}</label>

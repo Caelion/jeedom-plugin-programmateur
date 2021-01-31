@@ -115,6 +115,10 @@ $("#bt_selectTypeAction1").on('change', function () {
 			<div class="input-group" style="display:none">
 				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action1" value=""/>
 			</div>`;
+		var tagtxt = `
+			<div class="input-group" style="display:none">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TagAction1" value=""/>
+			</div>`;
 	} else if (value == 'Commande') {
 		var txt = `
 			<div class="input-group">
@@ -124,6 +128,10 @@ $("#bt_selectTypeAction1").on('change', function () {
 						<i class="fa fa-list-alt"></i>
 					</a>
 				</span>
+			</div>`;
+		var tagtxt = `
+			<div class="input-group" style="display:none">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TagAction1" value=""/>
 			</div>`;
 	} else if (value == 'Scenario') {
 		var txt = `
@@ -135,8 +143,14 @@ $("#bt_selectTypeAction1").on('change', function () {
 					</a>
 				</span>
 			</div>`;
+		var tagtxt = `
+			<div class="input-group">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TagAction1" placeholder="{{Valeur du tag}}"/>
+			</div>`;
 	}
 	$('#Action1').empty().append(txt);
+	$('#TagAction1').empty().append(tagtxt);
+
 	if (value == 'Commande') {
 		$("#bt_selectAction1").on('click', function () {
 			jeedom.cmd.getSelectModal({cmd: {type: 'action', subType: 'other'}}, function (result) {
@@ -158,6 +172,10 @@ $("#bt_selectTypeAction2").on('change', function () {
 			<div class="input-group" style="display:none">
 				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Action2" value=""/>
 			</div>`;
+		var tagtxt = `
+			<div class="input-group" style="display:none">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TagAction2" value=""/>
+			</div>`;
 	} else if (value == 'Commande') {
 		var txt = `
 			<div class="input-group">
@@ -167,6 +185,10 @@ $("#bt_selectTypeAction2").on('change', function () {
 						<i class="fa fa-list-alt"></i>
 					</a>
 				</span>
+			</div>`;
+		var tagtxt = `
+			<div class="input-group" style="display:none">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TagAction2" value=""/>
 			</div>`;
 	} else if (value == 'Scenario') {
 		var txt = `
@@ -178,8 +200,13 @@ $("#bt_selectTypeAction2").on('change', function () {
 					</a>
 				</span>
 			</div>`;
+		var tagtxt = `
+			<div class="input-group">
+				<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="TagAction2" placeholder="{{Valeur du tag}}"/>
+			</div>`;
 	}
 	$('#Action2').empty().append(txt);
+	$('#TagAction2').empty().append(tagtxt);
 	if (value == 'Commande') {
 		$("#bt_selectAction2").on('click', function () {
 			jeedom.cmd.getSelectModal({cmd: {type: 'action', subType: 'other'}}, function (result) {
